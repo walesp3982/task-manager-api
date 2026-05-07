@@ -5,11 +5,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.entities.task import StatusTask
 from app.models.base import Base
-from app.models.reminder import Reminder
-from app.models.user import User
+from app.models.reminder import ReminderModel
+from app.models.user import UserModel
 
 
-class Task(Base):
+class TaskModel(Base):
     __tablename__ = "tasks"
 
     id = Column(
@@ -37,8 +37,8 @@ class Task(Base):
         default=StatusTask.pending,
         nullable=False,
     )
-    user: Mapped["User"] = relationship(back_populates="tasks")
-    reminder: Mapped["Reminder"] = relationship(
+    user: Mapped["UserModel"] = relationship(back_populates="tasks")
+    reminder: Mapped["ReminderModel"] = relationship(
         back_populates="task",
         cascade="all, delete-orphan",
     )

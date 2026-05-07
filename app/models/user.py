@@ -6,11 +6,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base
 
 if TYPE_CHECKING:
-    from app.models.task import Task
-    from app.models.token import Token
+    from app.models.task import TaskModel
+    from app.models.token import TokenModel
 
 
-class User(Base):
+class UserModel(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(
@@ -33,9 +33,9 @@ class User(Base):
         nullable=False,
     )
 
-    tokens: Mapped[list["Token"]] = relationship(
+    tokens: Mapped[list["TokenModel"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
-    tasks: Mapped[list["Task"]] = relationship(
+    tasks: Mapped[list["TaskModel"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )

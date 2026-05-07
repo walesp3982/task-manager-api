@@ -1,14 +1,14 @@
 from .base import Base, engine
-from .reminder import Reminder
-from .task import Task
-from .token import Token
-from .user import User
+from .reminder import ReminderModel
+from .task import TaskModel
+from .token import TokenModel
+from .user import UserModel
 
 __all__ = [
     "engine",
     "Base",
-    "Reminder",
-    "Task",
-    "Token",
-    "User",
+    "ReminderModel",
+    "TaskModel",
+    "TokenModel",
+    "UserModel",
 ]

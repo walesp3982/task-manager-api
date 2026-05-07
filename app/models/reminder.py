@@ -7,10 +7,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base
 
 if TYPE_CHECKING:
-    from app.models.task import Task
+    from app.models.task import TaskModel
 
 
-class Reminder(Base):
+class ReminderModel(Base):
     __tablename__ = "reminders"
 
     id: Mapped[int] = mapped_column(
@@ -37,5 +37,5 @@ class Reminder(Base):
         nullable=True,
         index=True,
     )
-    task: Mapped["Task"] = relationship("Task", back_populates="reminders")
+    task: Mapped["TaskModel"] = relationship("Task", back_populates="reminders")
     __table_args__ = (Index("idx_done", "done", "timestamp_done"),)
