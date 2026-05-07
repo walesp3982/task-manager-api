@@ -17,11 +17,21 @@ class User(Base):
         primary_key=True,
         autoincrement=True,
     )
-    name: Mapped[str] = mapped_column(String(30), nullable=False, index=True)
-    email: Mapped[str] = mapped_column(
-        String(30), nullable=False, unique=True, index=True
+    name: Mapped[str] = mapped_column(
+        String(30),
+        nullable=False,
+        index=True,
     )
-    password: Mapped[str] = mapped_column(String(100), nullable=False)
+    email: Mapped[str] = mapped_column(
+        String(30),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    password: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False,
+    )
 
     tokens: Mapped[list["Token"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"

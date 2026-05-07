@@ -11,11 +11,23 @@ if TYPE_CHECKING:
 
 class Token(Base):
     __tablename__ = "tokens"
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id"), nullable=False, index=True
+    id: Mapped[int] = mapped_column(
+        primary_key=True,
+        autoincrement=True,
     )
-    token: Mapped[str] = mapped_column(String, nullable=False, index=True)
-    expires_at: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False,
+        index=True,
+    )
+    token: Mapped[str] = mapped_column(
+        String,
+        nullable=False,
+        index=True,
+    )
+    expires_at: Mapped[DateTime] = mapped_column(
+        DateTime,
+        nullable=False,
+    )
 
     user: Mapped["User"] = relationship("User", back_populates="tokens")

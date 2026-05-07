@@ -20,6 +20,7 @@ class Reminder(Base):
     task_id: Mapped[int] = mapped_column(
         ForeignKey("tasks.id"),
         index=True,
+        nullable=False,
     )
     trigger_date: Mapped[datetime] = mapped_column(
         DateTime,
@@ -29,9 +30,12 @@ class Reminder(Base):
     done: Mapped[bool] = mapped_column(
         default=False,
         index=True,
+        nullable=False,
     )
     timestamp_done: Mapped[datetime] = mapped_column(
-        DateTime, nullable=True, index=True
+        DateTime,
+        nullable=True,
+        index=True,
     )
     task: Mapped["Task"] = relationship("Task", back_populates="reminders")
     __table_args__ = (Index("idx_done", "done", "timestamp_done"),)
