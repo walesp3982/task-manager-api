@@ -33,11 +33,11 @@ class TokenRepository:
         return None if token is None else token.get_entity()
 
     def get_all_expired(
-        self, data_now: date, pagination: token.PaginationToken
+        self, date_now: date, pagination: token.PaginationToken
     ) -> list[Token]:
         stmt = (
             select(TokenModel)
-            .where(TokenModel.expires_at < data_now)
+            .where(TokenModel.expires_at < date_now)
             .limit(pagination.limit)
             .offset(pagination.offset)
         )

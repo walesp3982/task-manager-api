@@ -11,7 +11,7 @@ class TaskRepository:
     def __init__(self, session: Session) -> None:
         self._session = session
 
-    def create(self, task: CreateTask) -> Task | None:
+    def create(self, task: CreateTask) -> Task:
         new_task = TaskModel(task)
 
         self._session.add(new_task)
