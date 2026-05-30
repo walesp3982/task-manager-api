@@ -1,9 +1,10 @@
 from datetime import date
+from typing import Optional
 
-from sqlalchemy import Column, Date, Enum, ForeignKey, Integer, String
+from sqlalchemy import Date, Enum, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.entities.task import StatusTask
+from app.entities.task import CreateTask, StatusTask, Task
 from app.models.base import Base
 from app.models.reminder import ReminderModel
 from app.models.user import UserModel
@@ -12,7 +13,7 @@ from app.models.user import UserModel
 class TaskModel(Base):
     __tablename__ = "tasks"
 
-    id = Column(
+    id: Mapped[int] = mapped_column(
         Integer,
         primary_key=True,
         autoincrement=True,
@@ -27,7 +28,7 @@ class TaskModel(Base):
         index=True,
         nullable=False,
     )
-    date_limit: Mapped[date] = mapped_column(
+    date_limit: Mapped[Optional[date]] = mapped_column(
         Date(),
         index=True,
         nullable=True,
@@ -42,3 +43,18 @@ class TaskModel(Base):
         back_populates="task",
         cascade="all, delete-orphan",
     )
+
+    def __init__(self, dto: CreateTask):
+        self.user_id = dto.user_id
+        self.date_limit = dto.date_limit
+        self.name = dto.name
+        self.status = dto.status
+
+    def get_entity(self):
+        return Task(
+            id=self.id,
+            name=self.name,
+            user_id=self.user_id,
+            date_limit=self.date_limit,
+            status=self.status,
+        )

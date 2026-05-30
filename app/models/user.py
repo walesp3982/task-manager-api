@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.entities import CreateUser, User
 from app.models.base import Base
 
 if TYPE_CHECKING:
@@ -39,3 +40,16 @@ class UserModel(Base):
     tasks: Mapped[list["TaskModel"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
+
+    def __init__(self, user: CreateUser):
+        self.name = user.name
+        self.email = user.email
+        self.password = user.password
+
+    def get_entity(self):
+        return User(
+            id=self.id,
+            name=self.name,
+            email=self.email,
+            password=self.password,
+        )
