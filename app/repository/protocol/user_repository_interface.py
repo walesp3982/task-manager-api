@@ -6,8 +6,8 @@ from app.entities import CreateUser, User
 
 
 class FilterUser(BaseModel):
-    query_name: str | None
-    query_email: str | None
+    query_name: str | None = None
+    query_email: str | None = None
 
 
 class PaginationUser(BaseModel):
@@ -27,5 +27,5 @@ class UserRepositoryProtocol(Protocol):
         self, filter: FilterUser, pagination: PaginationUser
     ) -> list[User]: ...
     def count_by_filter(self, filter: FilterUser) -> int: ...
-    def update(self, user: User) -> bool: ...
+    def update(self, user: User) -> User | None: ...
     def delete(self, id: int) -> bool: ...
