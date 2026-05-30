@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from pydantic import BaseModel
 
@@ -8,7 +8,7 @@ class Reminder(BaseModel):
     task_id: int
     trigger_date: date
     done: bool
-    timestamp_done: date | None
+    timestamp_done: datetime | None
 
 
 class CreateReminder(BaseModel):
