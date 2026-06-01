@@ -4,7 +4,7 @@ import pytest
 
 from app.entities import Payload, Role
 from app.exceptions import auth
-from app.services import jwt
+from app.services import JWTService
 
 """
 Fixture necessary for this unit testing
@@ -12,10 +12,10 @@ Fixture necessary for this unit testing
 
 
 @pytest.fixture(scope="module")
-def get_jwt_service() -> jwt.JWTService:
+def get_jwt_service() -> JWTService:
     from secrets import token_hex
 
-    return jwt.JWTService(secret=token_hex(32))
+    return JWTService(secret=token_hex(32))
 
 
 """
@@ -58,7 +58,7 @@ Starting unit testing
 """
 
 
-def test_jwt_process(get_jwt_service: jwt.JWTService):
+def test_jwt_process(get_jwt_service: JWTService):
     """
     This test work verify the process work correctly
 
@@ -83,7 +83,7 @@ def test_jwt_process(get_jwt_service: jwt.JWTService):
     assert payload.model_dump() == old_payload.model_dump()
 
 
-def test_old_jwt(get_jwt_service: jwt.JWTService):
+def test_old_jwt(get_jwt_service: JWTService):
     """
     Test if decode method of JWTService work the exception AuthorizationExpired
     exception
