@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import String
+from sqlalchemy import Enum, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.entities import CreateUser, User
+from app.entities import CreateUser, Role, User
 from app.models.base import Base
 
 if TYPE_CHECKING:
@@ -34,6 +34,12 @@ class UserModel(Base):
         nullable=False,
     )
 
+    role: Mapped[Role] = mapped_column(
+        Enum(Role),
+        default=Role.client,
+        nullable=False,
+    )
+
     tokens: Mapped[list["TokenModel"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
@@ -45,6 +51,7 @@ class UserModel(Base):
         self.name = user.name
         self.email = user.email
         self.password = user.password
+        self.role = user.role
 
     def get_entity(self):
         return User(
@@ -52,4 +59,5 @@ class UserModel(Base):
             name=self.name,
             email=self.email,
             password=self.password,
+            role=self.role,
         )
