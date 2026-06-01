@@ -1,5 +1,5 @@
 from .mixed import ReminderWithTask, TaskWithUser, TokenWithUser, UserWithTask
-from .payload import BuildPayload, Payload
+from .payload import Payload
 from .reminder import CreateReminder, Reminder
 from .task import CreateTask, StatusTask, Task
 from .token import CreateToken, Token
@@ -20,6 +20,5 @@ __all__ = [
     "TokenWithUser",
     "StatusTask",
     "Role",
-    "BuildPayload",
     "Payload",
 ]
