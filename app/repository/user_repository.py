@@ -1,7 +1,7 @@
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.entities import CreateUser, User
+from app.entities import CreateUserDTO, User
 from app.models import UserModel
 
 from .protocol import user
@@ -11,7 +11,7 @@ class UserRepository:
     def __init__(self, session: Session):
         self._session = session
 
-    def create(self, user: CreateUser) -> User:
+    def create(self, user: CreateUserDTO) -> User:
         new_user = UserModel(user)
         self._session.add(new_user)
         self._session.commit()
