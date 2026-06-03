@@ -3,7 +3,7 @@ from .payload import Payload
 from .reminder import CreateReminder, Reminder
 from .task import CreateTask, StatusTask, Task
 from .token import CreateToken, Token
-from .user import CreateUser, Role, User
+from .user import CreateUserDTO, Role, User
 
 __all__ = [
     "Reminder",
@@ -12,7 +12,7 @@ __all__ = [
     "Token",
     "CreateReminder",
     "CreateTask",
-    "CreateUser",
+    "CreateUserDTO",
     "CreateToken",
     "TaskWithUser",
     "UserWithTask",
