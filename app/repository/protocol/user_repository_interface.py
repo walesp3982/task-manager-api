@@ -2,7 +2,7 @@ from typing import Protocol
 
 from pydantic import BaseModel, Field
 
-from app.entities import CreateUser, User
+from app.entities import CreateUserDTO, User
 
 
 class FilterUser(BaseModel):
@@ -20,7 +20,7 @@ class PaginationUser(BaseModel):
 
 
 class UserRepositoryProtocol(Protocol):
-    def create(self, user: CreateUser) -> User: ...
+    def create(self, user: CreateUserDTO) -> User: ...
     def get_by_id(self, id: int) -> User | None: ...
     def get_by_email(self, email: str) -> User | None: ...
     def get_by_filter(

@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 from app.entities import CreateTask, StatusTask, Task
 
 
-class DateFilter:
+class DateFilter(BaseModel):
     order_by: Literal["newest", "oldest"]
     as_date: date
 
