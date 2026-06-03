@@ -11,3 +11,8 @@ class UserNotFoundById(UserNotFound):
 class UserNotFoundByEmail(UserNotFound):
     def __init__(self, email: str):
         super().__init__(f"User by email: {email} not found")
+
+
+class DuplicateUser(Exception):
+    def __init__(self, email: str):
+        super().__init__(f"User was exist in db, email: {email}")

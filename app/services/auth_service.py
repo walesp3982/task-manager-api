@@ -1,8 +1,12 @@
-from app.entities import CreateToken, Token, User
+from app.entities import CreateToken, CreateUserDTO, Token, User
 from app.entities.payload import Payload
 from app.exceptions.auth_exception import InvalidCredencials
 from app.exceptions.token_exception import TokenExpired, TokenNotFound
-from app.exceptions.user_exceptions import UserNotFoundByEmail, UserNotFoundById
+from app.exceptions.user_exceptions import (
+    DuplicateUser,
+    UserNotFoundByEmail,
+    UserNotFoundById,
+)
 from app.repository.protocol import token, user
 from app.services import JWTService
 
@@ -127,3 +131,14 @@ class AuthService:
         refresh_token = self.generate_refresh_token(access_token)
 
         return (access_token, refresh_token)
+
+    def register_new_user(self, dto: CreateUserDTO) -> User:
+        # find if existe email exist in db
+        if self._user_repository.get_by_email(dto.email) is not None:
+            raise DuplicateUser(dto.email)
+
+        # hashing password
+        dto.password = User.hash_password(dto.password)
+
+        user = self._user_repository.create(dto)
+        return user

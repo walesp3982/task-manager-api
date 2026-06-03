@@ -22,6 +22,11 @@ class User:
         password_hash = PasswordHash.recommended()
         return password_hash.verify(self.password, plain_password)
 
+    @staticmethod
+    def hash_password(password: str) -> str:
+        password_hash = PasswordHash.recommended()
+        return password_hash.hash(password)
+
 
 class CreateUserDTO(BaseModel):
     name: str

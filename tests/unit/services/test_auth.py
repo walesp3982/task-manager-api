@@ -3,10 +3,10 @@ from unittest.mock import MagicMock, Mock, create_autospec, patch
 
 import pytest
 
-from app.entities import Role, Token, User
+from app.entities import CreateUserDTO, Role, Token, User
 from app.exceptions.auth_exception import InvalidCredencials
 from app.exceptions.token_exception import TokenExpired, TokenNotFound
-from app.exceptions.user_exceptions import UserNotFoundByEmail
+from app.exceptions.user_exceptions import DuplicateUser, UserNotFoundByEmail
 from app.repository.protocol.token_repository_protocol import TokenRepositoryProtocol
 from app.repository.protocol.user_repository_interface import UserRepositoryProtocol
 from app.services import JWTService
@@ -194,3 +194,48 @@ def test_login_but_user_password_verification_incorrect(
 
     with pytest.raises(InvalidCredencials):
         service.login(email="j@gmail.com", password="password")
+
+
+@patch("app.entities.user.User.hash_password")
+def test_register_new_user(hash_password: Mock, service: AuthService, user_repo: Mock):
+    user_repo.get_by_email.return_value = None
+    result_user = User(
+        id=1,
+        name="john",
+        email="j@gmail.com",
+        password="hash_password",
+        role=Role.client,
+    )
+
+    user_repo.create.return_value = result_user
+
+    hash_password.return_value = "hash_password"
+
+    dto_test = CreateUserDTO(
+        email="j@gmail.com",
+        password="plain_password",
+        name="john",
+        role=Role.client,
+    )
+
+    user = service.register_new_user(dto_test)
+    assert user == result_user
+
+    user_repo.get_by_email.assert_called_once_with(dto_test.email)
+
+    hash_password.assert_called_once_with("plain_password")
+
+    user_repo.create.assert_called_once_with(dto_test)
+
+
+def test_register_new_user_if_email_has_register_before(
+    service: AuthService,
+    user_repo: Mock,
+):
+    user_mock = create_autospec(User, instance=True)
+    dto_mock = create_autospec(CreateUserDTO, instance=True)
+    dto_mock.email = "mail@mail.com"
+    user_repo.get_by_email.return_value = user_mock
+
+    with pytest.raises(DuplicateUser):
+        service.register_new_user(dto_mock)
