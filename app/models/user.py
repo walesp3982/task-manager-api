@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from sqlalchemy import Enum, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.entities import CreateUser, Role, User
+from app.entities import CreateUserDTO, Role, User
 from app.models.base import Base
 
 if TYPE_CHECKING:
@@ -47,7 +47,7 @@ class UserModel(Base):
         back_populates="user", cascade="all, delete-orphan"
     )
 
-    def __init__(self, user: CreateUser):
+    def __init__(self, user: CreateUserDTO):
         self.name = user.name
         self.email = user.email
         self.password = user.password
