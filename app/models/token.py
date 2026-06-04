@@ -28,11 +28,11 @@ class TokenModel(Base):
         index=True,
     )
     expires_at: Mapped[datetime] = mapped_column(
-        DateTime,
+        DateTime(timezone=True),
         nullable=False,
     )
 
-    user: Mapped["UserModel"] = relationship("User", back_populates="tokens")
+    user: Mapped["UserModel"] = relationship(back_populates="tokens")
 
     def __init__(self, token: CreateToken):
         self.expires_at = token.expires_at

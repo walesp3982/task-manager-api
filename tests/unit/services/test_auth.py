@@ -62,7 +62,7 @@ def test_generate_access_token(
     mock_encript.return_value = "hashed_token_abc"
     mock_get_datetime.return_value = fake_datetime
 
-    result = service.generate_access_token(user)
+    result = service.generate_refresh_token(user)
 
     assert result == "raw_token_123"
     mock_generate.assert_called_once()
@@ -102,7 +102,7 @@ def test_generate_refresh_token(
     )
 
     jwt_service.encode.return_value = "token_jwt"
-    result = service.generate_refresh_token("token")
+    result = service.generate_access_token("token")
     assert result == "token_jwt"
 
 
@@ -118,7 +118,7 @@ def test_generate_refresh_token_not_found_access_token(
     token_repo.get_by_token.return_value = None
 
     with pytest.raises(TokenNotFound):
-        service.generate_refresh_token("token")
+        service.generate_access_token("token")
 
     user_repo.get_by_id.assert_not_called()
 
@@ -138,7 +138,7 @@ def test_generate_refresh_token_if_access_token_is_expired(
     )
 
     with pytest.raises(TokenExpired):
-        service.generate_refresh_token("token_str")
+        service.generate_access_token("token_str")
 
 
 def test_logout(service: AuthService, token_repo: Mock):
@@ -173,8 +173,8 @@ def test_login_process(service: AuthService, user_repo: Mock):
         assert access == "fake_token_access"
         assert refresh == "fake_token_refresh"
 
-        mock_access.assert_called_once_with(mock_user)
-        mock_refresh.assert_called_once_with("fake_token_access")
+        mock_refresh.assert_called_once_with(mock_user)
+        mock_access.assert_called_once_with("fake_token_refresh")
 
 
 def test_login_but_user_email_not_found(service: AuthService, user_repo: Mock):

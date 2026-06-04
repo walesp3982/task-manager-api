@@ -4,7 +4,7 @@ from sqlalchemy import Enum, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.entities import CreateUserDTO, Role, User
-from app.models.base import Base
+from app.models import Base
 
 if TYPE_CHECKING:
     from app.models.task import TaskModel

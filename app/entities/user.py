@@ -20,7 +20,7 @@ class User:
 
     def verify_password(self, plain_password: str) -> bool:
         password_hash = PasswordHash.recommended()
-        return password_hash.verify(self.password, plain_password)
+        return password_hash.verify(plain_password, self.password)
 
     @staticmethod
     def hash_password(password: str) -> str:

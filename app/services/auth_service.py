@@ -8,7 +8,7 @@ from app.exceptions.user_exceptions import (
     UserNotFoundById,
 )
 from app.repository.protocol import token, user
-from app.services import JWTService
+from app.services.jwt_service import JWTService
 
 
 class AuthService:
@@ -31,7 +31,7 @@ class AuthService:
         self._user_session_minutes = user_session_time
         self._token_session_minutes = token_session_time
 
-    def generate_access_token(self, user: User) -> str:
+    def generate_refresh_token(self, user: User) -> str:
         """
         Get a access_token through the id of user
 
@@ -59,7 +59,7 @@ class AuthService:
         # Return access token
         return str_token
 
-    def generate_refresh_token(self, token_str: str) -> str:
+    def generate_access_token(self, token_str: str) -> str:
         """
         Generate a refresh token through of a token_str
 
@@ -111,9 +111,8 @@ class AuthService:
         """
         Method about funcionality is:
 
-        1) Generate a access token and save and repository.
-        2) Generate a refresh token to base a access token.
-
+        1) Generate a refresh token to base a access token.
+        2) To base a refresh token generate the first access_token
         Returns:
             (access_token, refresh_token) -> type (str, str)
         """
@@ -127,8 +126,8 @@ class AuthService:
         if not user.verify_password(password):
             raise InvalidCredencials()
 
-        access_token = self.generate_access_token(user)
-        refresh_token = self.generate_refresh_token(access_token)
+        refresh_token = self.generate_refresh_token(user)
+        access_token = self.generate_access_token(refresh_token)
 
         return (access_token, refresh_token)
 

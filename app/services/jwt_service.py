@@ -14,7 +14,7 @@ class JWTService:
 
     def decode(self, encode: str) -> Payload:
         try:
-            decode = jwt.decode(encode, self._secret, algorithms=["HS256"])
+            decode = jwt.decode(encode, self._secret, algorithms=["HS256"], leeway=10)
             return Payload(**decode)
         except jwt.ExpiredSignatureError:
             raise auth.AuthorizationExpired()

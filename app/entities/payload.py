@@ -9,8 +9,8 @@ class Payload(BaseModel):
     sub: str
     name: str
     role: Role
-    iat: int
-    exp: int
+    iat: datetime
+    exp: datetime
 
     @classmethod
     def create(cls, sub: str, name: str, role: Role, minutes_expired: int):
@@ -18,18 +18,18 @@ class Payload(BaseModel):
             sub=sub,
             name=name,
             role=role,
-            iat=cls.get_expired_datetime(minutes_expired),
-            exp=cls.get_actual_datetime(),
+            exp=cls.get_expired_datetime(minutes_expired),
+            iat=cls.get_actual_datetime(),
         )
 
     @staticmethod
     def get_expired_datetime(minutes: int):
         datetime_expired = datetime.now(timezone.utc) + timedelta(minutes=minutes)
 
-        return int(datetime_expired.timestamp())
+        return datetime_expired
 
     @staticmethod
     def get_actual_datetime():
         now_datetime = datetime.now(timezone.utc)
 
-        return int(now_datetime.timestamp())
+        return now_datetime

@@ -1,13 +1,15 @@
 from datetime import date
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import Date, Enum, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.entities.task import CreateTask, StatusTask, Task
 from app.models.base import Base
-from app.models.reminder import ReminderModel
-from app.models.user import UserModel
+
+if TYPE_CHECKING:
+    from app.models.reminder import ReminderModel
+    from app.models.user import UserModel
 
 
 class TaskModel(Base):
@@ -39,7 +41,7 @@ class TaskModel(Base):
         nullable=False,
     )
     user: Mapped["UserModel"] = relationship(back_populates="tasks")
-    reminder: Mapped["ReminderModel"] = relationship(
+    reminders: Mapped[list["ReminderModel"]] = relationship(
         back_populates="task",
         cascade="all, delete-orphan",
     )

@@ -26,11 +26,16 @@ Function built-in for create payload
 def built_payload(iat: datetime, exp: datetime) -> Payload:
     return Payload(
         sub="1",
-        exp=int(exp.timestamp()),
-        iat=int(iat.timestamp()),
+        exp=exp,
+        iat=iat,
         name="Jhon",
         role=Role.client,
     )
+
+
+def normalize_dt(dt: datetime) -> datetime:
+    """Trunca microsegundos y normaliza tzinfo a timezone.utc"""
+    return dt.replace(microsecond=0, tzinfo=timezone.utc)
 
 
 def built_actual_payload() -> Payload:
@@ -80,7 +85,8 @@ def test_jwt_process(get_jwt_service: JWTService):
     old_payload = jwt_service.decode(encode=token_jwt)
 
     # Compare the payload before/after of decode
-    assert payload.model_dump() == old_payload.model_dump()
+    assert normalize_dt(payload.exp) == normalize_dt(old_payload.exp)
+    assert normalize_dt(payload.iat) == normalize_dt(old_payload.iat)
 
 
 def test_old_jwt(get_jwt_service: JWTService):

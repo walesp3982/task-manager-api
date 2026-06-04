@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from typing import TYPE_CHECKING, Optional
 
-from sqlalchemy import DateTime, ForeignKey, Index
+from sqlalchemy import Date, DateTime, ForeignKey, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.entities import CreateReminder, Reminder
@@ -24,7 +24,7 @@ class ReminderModel(Base):
         nullable=False,
     )
     trigger_date: Mapped[date] = mapped_column(
-        DateTime,
+        Date,
         nullable=False,
         index=True,
     )
@@ -34,11 +34,11 @@ class ReminderModel(Base):
         nullable=False,
     )
     timestamp_done: Mapped[Optional[datetime]] = mapped_column(
-        DateTime,
+        DateTime(timezone=True),
         nullable=True,
         index=True,
     )
-    task: Mapped["TaskModel"] = relationship("Task", back_populates="reminders")
+    task: Mapped["TaskModel"] = relationship(back_populates="reminders")
     __table_args__ = (Index("idx_done", "done", "timestamp_done"),)
 
     def __init__(self, reminder: CreateReminder):
